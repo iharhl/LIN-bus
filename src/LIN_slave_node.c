@@ -1,6 +1,7 @@
 #include "LIN_slave_node.h"
 #include "HAL_debug.h"
 #include "LIN_defines.h"
+#include "../utils/Logger.h"
 #include <stdio.h>
 
 static LIN_Slave_State LIN_Slave_Current_State;
@@ -15,12 +16,12 @@ bool LIN_Slave_Goto_State(LIN_Slave_State newState)
     {
     case IDLE_STATE_SLAVE:
     {
-        printf("Slave in Idle\n");
+        Debug_Log(__FILE__, "Idle\n");
         break;
     }
     case SYNC_RX_STATE_SLAVE:
     {
-        printf("Slave in Idle\n");
+        Debug_Log(__FILE__, "Rx_Sync\n");
         uint8_t rxByte = LIN_HAL_Rx_Byte();
 
         if (rxByte == 0x55) 
@@ -32,7 +33,7 @@ bool LIN_Slave_Goto_State(LIN_Slave_State newState)
     }
     case PID_STATE_SLAVE:
     {
-        printf("Slave in Idle\n");
+        Debug_Log(__FILE__, "PID");
         uint8_t rxByte = LIN_HAL_Rx_Byte();
 
         if (rxByte == DEBUG_PID)
@@ -43,12 +44,12 @@ bool LIN_Slave_Goto_State(LIN_Slave_State newState)
     }
     case DATA_RX_STATE_SLAVE:
     {
-        printf("Slave in Idle\n");
+        Debug_Log(__FILE__, "Rx_Data");
         break;
     }
     case CHECKSUM_RX_STATE_SLAVE:
     {
-        printf("Slave in Idle\n");
+        Debug_Log(__FILE__, "Rx_Checksum");
         break;
     }
     default:

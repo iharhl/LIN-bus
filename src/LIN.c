@@ -1,11 +1,12 @@
 #include "LIN.h"
 #include <stdio.h>
+#include "../utils/Logger.h"
 
 bool LIN_Sys_Init()
 {
-    printf("LIN bus init begin\n");
+    Debug_Log(__FILE__, "LIN bus init begin");
     LIN_Master_Init();
     LIN_Slave_Init();
-    printf("LIN bus init end\n");
+    Debug_Log(__FILE__, "LIN bus init end");
     return true;
 }

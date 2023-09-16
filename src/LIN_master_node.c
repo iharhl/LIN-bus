@@ -1,5 +1,6 @@
 #include "LIN_master_node.h"
 #include "LIN_defines.h"
+#include "../utils/Logger.h"
 #include <stdio.h>
 #include <stddef.h>
 
@@ -18,27 +19,27 @@ bool LIN_Master_Goto_State(LIN_Master_State newState)
         case IDLE_STATE_MASTER:
         {
             LIN_Master_Current_State = newState;
-            printf("Master in Idle\n");
+            Debug_Log(__FILE__, "Idle");
             break;
         }
         case BREAK_STATE_MASTER:
         {
             LIN_Master_Current_State = newState;
-            printf("Break\n");
+            Debug_Log(__FILE__, "Send Break");
             result = LIN_HAL_Tx_Break() && result;
             break;
         }
         case SYNC_STATE_MASTER:
         {
             LIN_Master_Current_State = newState;
-            printf("Sync\n");
+            Debug_Log(__FILE__, "Sync");
             result = LIN_HAL_Tx_Byte(0x55) && result;
             break;
         }
         case PID_STATE_MASTER:
         {
             LIN_Master_Current_State = newState;
-            printf("PID\n");
+            Debug_Log(__FILE__, "PID");
             result = LIN_HAL_Tx_Byte(DEBUG_PID) && result;
             break;
         }
@@ -60,7 +61,7 @@ bool LIN_Master_Tx_Header()
         LIN_Master_Goto_State(PID_STATE_MASTER);
     } else
     {
-        printf("Not in Idle before Tx Header\n");
+        Debug_Log(__FILE__, "Not in Idle before Tx Header");
     }
     LIN_Master_Goto_State(IDLE_STATE_MASTER);
     return result;

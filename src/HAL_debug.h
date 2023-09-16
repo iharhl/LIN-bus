@@ -6,7 +6,7 @@
 
 // Prototypes
 bool LIN_HAL_Tx_Break();
-bool LIN_HAL_Tx_Byte();
+bool LIN_HAL_Tx_Byte(uint8_t byte);
 bool LIN_HAL_Detect_Break();
 uint8_t LIN_HAL_Rx_Byte();
 
