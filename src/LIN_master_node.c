@@ -5,14 +5,14 @@
 #include <stdio.h>
 #include <stddef.h>
 
-static LIN_Master_State LIN_Master_Current_State;
+static LIN_Master_State_Enum_t LIN_Master_Current_State;
+static LIN_Master_Frame_Table_Struct_t* LIN_Master_Frame_Table;
+static uint8_t LIN_Master_Frame_Table_Size;
 
-bool LIN_Master_Goto_State(LIN_Master_State newState)
+bool LIN_Master_Goto_State(LIN_Master_State_Enum_t newState)
 {
     // Indicate if state execution was successfull
     bool result = true;
-
-    // TODO: error checker
 
     // FSM
     switch(newState)
@@ -41,7 +41,9 @@ bool LIN_Master_Goto_State(LIN_Master_State newState)
         {
             LIN_Master_Current_State = newState;
             // Debug_Log(__FILE__, "PID");
-            result = LIN_HAL_Tx_Byte(DEBUG_PID) && result;
+            uint8_t frame_identifier = LIN_Master_Frame_Table->slot.pid;
+            uint8_t pid = LIN_PID_Add_Parity_Bits(frame_identifier);
+            result = LIN_HAL_Tx_Byte(pid) && result;
             break;
         }
         default:
@@ -63,12 +65,15 @@ bool LIN_Master_Tx_Header()
     } else
     {
         // Debug_Log(__FILE__, "Not in Idle before Tx Header");
+        /* SET ERROR */
     }
     LIN_Master_Goto_State(IDLE_STATE_MASTER);
     return result;
 }
 
-void LIN_Master_Init()
+void LIN_Master_Init(LIN_Master_Frame_Table_Struct_t* masterFrameTablePtr, uint8_t masterFrameTableSize)
 {
+    LIN_Master_Frame_Table = masterFrameTablePtr;
+    LIN_Master_Frame_Table_Size = masterFrameTableSize;
     LIN_Master_Goto_State(IDLE_STATE_MASTER);
 }
