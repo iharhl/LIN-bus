@@ -1,0 +1,1 @@
+add_library(LIN_master LIN_master_node.c HAL_debug.c)

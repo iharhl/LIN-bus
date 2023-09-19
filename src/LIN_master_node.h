@@ -2,7 +2,6 @@
 #define _LIN_MASTER_NODE_H
 
 #include <stdbool.h>
-#include "HAL_debug.h"
 
 typedef enum
 {

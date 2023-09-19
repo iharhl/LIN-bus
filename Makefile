@@ -11,6 +11,7 @@ COMPILE = $(CXX) $(CXX_FLAGS)
 
 BUILD_DIR = build
 SRC_DIR = src
+TEST_DIR = test
 UTILS_DIR = utils
 
 SOURCES = $(wildcard $(SRC_DIR)/*.c)
@@ -28,6 +29,13 @@ $(BUILD_DIR)/%.o: $(UTILS_DIR)/%.c build
 
 run:
 	$(BUILD_DIR)/main
+
+test-build: build
+	(cd $(BUILD_DIR) && cmake ..)
+	cmake --build ./$(BUILD_DIR) --config Debug --target all --
+
+test-run:
+	$(BUILD_DIR)/$(TEST_DIR)/LIN_Bus_gtest_master
 
 build:
 	mkdir -p $(BUILD_DIR)
